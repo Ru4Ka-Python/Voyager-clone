@@ -460,30 +460,27 @@ class VoyagerConfigWindow(QMainWindow):
     def _on_models_changed(self) -> None:
         all_legacy, any_legacy = self._compute_mode()
 
+        # Fix: Enable new settings if ANY model is non-legacy (new)
+        # Enable old settings only if ALL models are legacy
         old_enabled = all_legacy
-        settings_enabled = not any_legacy
+        settings_enabled = not all_legacy  # Enable new settings if not all legacy (including mixed)
 
         self.tabs.setTabEnabled(self.settings_tab_index, settings_enabled)
         self.tabs.setTabEnabled(self.old_settings_tab_index, old_enabled)
 
         if not settings_enabled:
-            if all_legacy:
-                self.settings_unavailable.setText(
-                    "Settings are disabled because all selected models are legacy. Use Old settings instead."
-                )
-            else:
-                self.settings_unavailable.setText(
-                    "Settings are disabled because you selected a mix of legacy and non-legacy models. "
-                    "Select either all legacy (gpt-3.5-turbo..gpt-4.1) or all newer models."
-                )
+            # This should never happen now since settings_enabled = not all_legacy
+            self.settings_unavailable.setText(
+                "Settings are disabled because all selected models are legacy. Use Old settings instead."
+            )
         else:
             self.settings_unavailable.setText("")
 
         if not old_enabled:
             if any_legacy:
                 self.old_unavailable.setText(
-                    "Old settings are disabled because you selected a mix of legacy and non-legacy models. "
-                    "Select either all legacy (gpt-3.5-turbo..gpt-4.1) or all newer models."
+                    "Old settings are only available when all selected models are legacy (gpt-3.5-turbo..gpt-4.1). "
+                    "You have selected newer models, so use Settings instead."
                 )
             else:
                 self.old_unavailable.setText(
@@ -509,10 +506,11 @@ class VoyagerConfigWindow(QMainWindow):
         selected = self._selected_models()
         supports = [model_support(m) for m in selected]
 
-        reasoning_ok = all(s.reasoning_effort for s in supports)
-        verbosity_ok = all(s.verbosity for s in supports)
-        store_ok = all(s.store for s in supports)
-        xhigh_ok = all(s.xhigh_reasoning for s in supports)
+        # Fix: Enable settings if ANY model supports them (for mixed scenarios)
+        reasoning_ok = any(s.reasoning_effort for s in supports)
+        verbosity_ok = any(s.verbosity for s in supports)
+        store_ok = any(s.store for s in supports)
+        xhigh_ok = any(s.xhigh_reasoning for s in supports)
 
         reasoning_values = ["none", "low", "medium", "high"]
         if xhigh_ok:
@@ -646,7 +644,8 @@ class VoyagerConfigWindow(QMainWindow):
             cfg["old_settings"]["top_p"] = None
             cfg["old_settings"]["max_tokens"] = None
 
-        if not any_legacy:
+        # Fix: Save settings if settings tab is enabled (i.e., not all models are legacy)
+        if not all_legacy:
             cfg["settings"]["reasoning_effort"] = (
                 self.reasoning_effort.currentText() if self.reasoning_effort.isEnabled() else None
             )
@@ -786,7 +785,8 @@ class VoyagerConfigWindow(QMainWindow):
 
         chat_opts: Dict[str, object] = {"store": bool(cfg["settings"]["store"])}
 
-        if not any_legacy:
+        # Fix: Use settings if not all models are legacy (including mixed scenarios)
+        if not all_legacy:
             if cfg["settings"]["reasoning_effort"] is not None:
                 chat_opts["reasoning_effort"] = cfg["settings"]["reasoning_effort"]
             if cfg["settings"]["verbosity"] is not None:
