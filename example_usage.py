@@ -9,9 +9,13 @@ import json
 from voyager import Voyager
 
 
-def load_voyager_from_config(config_file="voyager_config_example.json", openai_api_key=None, azure_login=None):
-    """
-    Load Voyager configuration from a JSON file and instantiate Voyager.
+def load_voyager_from_config(
+    config_file="voyager_config_example.json", openai_api_key=None, azure_login=None
+):
+    """Load Voyager configuration from a JSON file and instantiate Voyager.
+
+    The GUI can produce multiple config formats (older Tkinter format and the newer
+    PyQt6 format). This loader supports both.
 
     Args:
         config_file: Path to the JSON configuration file
@@ -19,10 +23,45 @@ def load_voyager_from_config(config_file="voyager_config_example.json", openai_a
         azure_login: Azure login configuration (will override config if provided)
 
     Returns:
-        Voyager instance
+        (Voyager instance, chat_completions_options dict)
     """
-    with open(config_file, 'r') as f:
+
+    with open(config_file, "r") as f:
         config = json.load(f)
+
+    settings = config.get("settings") if isinstance(config.get("settings"), dict) else {}
+    old_settings = (
+        config.get("old_settings") if isinstance(config.get("old_settings"), dict) else {}
+    )
+
+    reasoning_effort = settings.get("reasoning_effort", config.get("reasoning_effort"))
+    verbosity = settings.get("verbosity", config.get("verbosity"))
+
+    store = settings.get("store")
+    if store is None:
+        store = old_settings.get("store")
+    if store is None:
+        store = config.get("store")
+
+    def _to_bool(v):
+        if isinstance(v, bool):
+            return v
+        if isinstance(v, str):
+            return v.strip().lower() == "true"
+        return bool(v)
+
+    chat_completions_options = {}
+    if store is not None:
+        chat_completions_options["store"] = _to_bool(store)
+    if reasoning_effort:
+        chat_completions_options["reasoning_effort"] = reasoning_effort
+    if verbosity:
+        chat_completions_options["verbosity"] = verbosity
+
+    if old_settings.get("top_p") is not None:
+        chat_completions_options["top_p"] = old_settings["top_p"]
+    if old_settings.get("max_tokens") is not None:
+        chat_completions_options["max_tokens"] = old_settings["max_tokens"]
 
     # Use provided credentials or require them to be set
     if openai_api_key is None:
@@ -32,9 +71,13 @@ def load_voyager_from_config(config_file="voyager_config_example.json", openai_a
         print("\nAzure Login Configuration:")
         azure_login = {
             "client_id": input("Client ID: "),
-            "redirect_url": input("Redirect URL (default: https://127.0.0.1/auth-response): ") or "https://127.0.0.1/auth-response",
+            "redirect_url": input(
+                "Redirect URL (default: https://127.0.0.1/auth-response): "
+            )
+            or "https://127.0.0.1/auth-response",
             "secret_value": input("Secret value (optional, press Enter to skip): ") or None,
-            "version": input("Version (default: fabric-loader-0.14.18-1.19): ") or "fabric-loader-0.14.18-1.19",
+            "version": input("Version (default: fabric-loader-0.14.18-1.19): ")
+            or "fabric-loader-0.14.18-1.19",
         }
 
     # Create Voyager with the loaded configuration
@@ -54,20 +97,40 @@ def load_voyager_from_config(config_file="voyager_config_example.json", openai_a
     )
 
     # Display configuration summary
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("Voyager Configuration Loaded")
-    print("="*60)
-    print(f"Action Agent:        {config['action_agent']['model']} (temp={config['action_agent']['temperature']})")
-    print(f"Curriculum Agent:    {config['curriculum_agent']['model']} (temp={config['curriculum_agent']['temperature']})")
-    print(f"Curriculum QA:        {config['curriculum_agent']['qa_model']} (temp={config['curriculum_agent']['qa_temperature']})")
-    print(f"Critic Agent:         {config['critic_agent']['model']} (temp={config['critic_agent']['temperature']})")
-    print(f"Skill Manager:        {config['skill_manager']['model']} (temp={config['skill_manager']['temperature']})")
-    print(f"Reasoning Effort:     {config['reasoning_effort']}")
-    print(f"Verbosity:            {config['verbosity']}")
-    print(f"Store:                {config['store']}")
-    print("="*60 + "\n")
+    print("=" * 60)
+    print(
+        f"Action Agent:        {config['action_agent']['model']} (temp={config['action_agent']['temperature']})"
+    )
+    print(
+        f"Curriculum Agent:    {config['curriculum_agent']['model']} (temp={config['curriculum_agent']['temperature']})"
+    )
+    print(
+        f"Curriculum QA:       {config['curriculum_agent']['qa_model']} (temp={config['curriculum_agent']['qa_temperature']})"
+    )
+    print(
+        f"Critic Agent:        {config['critic_agent']['model']} (temp={config['critic_agent']['temperature']})"
+    )
+    print(
+        f"Skill Manager:       {config['skill_manager']['model']} (temp={config['skill_manager']['temperature']})"
+    )
 
-    return voyager, config.get('chat_completions_options', {})
+    if reasoning_effort is not None:
+        print(f"Reasoning Effort:     {reasoning_effort}")
+    if verbosity is not None:
+        print(f"Verbosity:            {verbosity}")
+    if store is not None:
+        print(f"Store:                {store}")
+
+    if old_settings.get("top_p") is not None:
+        print(f"Top-p:               {old_settings['top_p']}")
+    if old_settings.get("max_tokens") is not None:
+        print(f"Max tokens:          {old_settings['max_tokens']}")
+
+    print("=" * 60 + "\n")
+
+    return voyager, chat_completions_options
 
 
 if __name__ == "__main__":

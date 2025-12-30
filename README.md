@@ -75,49 +75,39 @@ Follow the instructions in [Fabric Mods Install](installation/fabric_mods_instal
 
 # GUI Configuration Tool
 
-Voyager includes a GUI tool (`gui.py`) to help you configure the GPT models and API parameters without editing code.
+Voyager includes a GUI tool (`gui.py`) to help you configure agent models and supported API parameters without editing code.
+
+The GUI uses **PyQt6**.
 
 ## Using the GUI
 
 Launch the configuration tool:
+
 ```bash
 python gui.py
 ```
 
-The GUI provides three tabs:
+The GUI provides these tabs:
 
-### Models Tab
-Select which GPT model to use for each agent:
-- **Action Agent Model**: The main agent that generates code for tasks
-- **Curriculum Agent Model**: The agent that proposes new tasks
-- **Curriculum QA Model**: The model used for question-answering in curriculum
-- **Critic Agent Model**: The agent that evaluates task completion
-- **Skill Manager Model**: The model used for skill retrieval and management
+### Models
+Select which GPT model to use for each agent.
 
-Available models:
-- gpt-5.2-pro, gpt-5.2, gpt-5.1, gpt-5-mini
-- gpt-4.1, gpt-4.1-mini
-- o4-mini, o3, o1
-- gpt-4o, gpt-4o-mini, gpt-4-turbo, gpt-4
-- gpt-3.5-turbo
+### Settings (new)
+Configure modern options:
+- `reasoning_effort`
+- `verbosity`
+- `store`
 
-### Options Tab
-Configure Chat Completions API options:
-- **Reasoning Effort**: Controls the amount of reasoning (none, low, medium, high, xhigh)
-- **Verbosity**: Controls output verbosity (low, medium, high)
-- **Store**: Whether to store conversation history (true, false)
+### Old settings (legacy)
+Configure legacy options:
+- `temperature`
+- `max_tokens`
+- `top_p`
+- `store`
+
+The **Old settings** tab is only available when all selected agent models are within the legacy range `gpt-3.5-turbo` .. `gpt-4.1`.
 
 For detailed documentation, see [GUI_README.md](GUI_README.md).
-
-### Advanced Tab
-Adjust the temperature parameter (0.0-2.0), which controls response randomness.
-
-### Buttons
-- **Save Config**: Save your configuration to a JSON file for later use
-- **Generate Code**: Generate a Python script with your selected configuration
-- **Load Config**: Load a previously saved configuration
-- **Reset**: Reset all settings to defaults
-- **Exit**: Close the GUI
 
 ## Using Generated Configuration
 
