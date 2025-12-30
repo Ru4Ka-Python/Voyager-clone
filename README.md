@@ -47,7 +47,7 @@ cd Voyager
 pip install -e .
 ```
 
-## Node.js Install (You can safely [npm warn deprecated ...] and [5 high severity vulnerabilities] messages)
+## Node.js Install
 In addition to the Python dependencies, you need to install the following Node.js packages:
 ```
 cd voyager/env/mineflayer
@@ -59,6 +59,7 @@ npx tsc
 cd ..
 npm install
 ```
+(You can safely ignore messages like [npm warn deprecated ...] and [5 high severity vulnerabilities] )
 
 ## Minecraft Instance Install
 
