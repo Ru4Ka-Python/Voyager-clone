@@ -1,0 +1,23 @@
+{
+    "action_agent": {
+        "model": "gpt-4",
+        "temperature": 0.0
+    },
+    "curriculum_agent": {
+        "model": "gpt-4",
+        "temperature": 0.0,
+        "qa_model": "gpt-3.5-turbo",
+        "qa_temperature": 0.0
+    },
+    "critic_agent": {
+        "model": "gpt-4",
+        "temperature": 0.0
+    },
+    "skill_manager": {
+        "model": "gpt-3.5-turbo",
+        "temperature": 0.0
+    },
+    "reasoning_effort": "none",
+    "verbosity": "medium",
+    "store": "false"
+}

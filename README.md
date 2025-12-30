@@ -73,6 +73,58 @@ You need to install fabric mods to support all the features in Voyager. Remember
 
 Follow the instructions in [Fabric Mods Install](installation/fabric_mods_install.md) to install the mods.
 
+# GUI Configuration Tool
+
+Voyager includes a GUI tool (`gui.py`) to help you configure the GPT models and API parameters without editing code.
+
+## Using the GUI
+
+Launch the configuration tool:
+```bash
+python gui.py
+```
+
+The GUI provides three tabs:
+
+### Models Tab
+Select which GPT model to use for each agent:
+- **Action Agent Model**: The main agent that generates code for tasks
+- **Curriculum Agent Model**: The agent that proposes new tasks
+- **Curriculum QA Model**: The model used for question-answering in curriculum
+- **Critic Agent Model**: The agent that evaluates task completion
+- **Skill Manager Model**: The model used for skill retrieval and management
+
+Available models:
+- gpt-5.2-pro, gpt-5.2, gpt-5.1, gpt-5-mini
+- gpt-4.1, gpt-4.1-mini
+- o4-mini, o3, o1
+- gpt-4o, gpt-4o-mini, gpt-4-turbo, gpt-4
+- gpt-3.5-turbo
+
+### Options Tab
+Configure Chat Completions API options:
+- **Reasoning Effort**: Controls the amount of reasoning (none, low, medium, high, xhigh)
+- **Verbosity**: Controls output verbosity (low, medium, high)
+- **Store**: Whether to store conversation history (true, false)
+
+For detailed documentation, see [GUI_README.md](GUI_README.md).
+
+### Advanced Tab
+Adjust the temperature parameter (0.0-2.0), which controls response randomness.
+
+### Buttons
+- **Save Config**: Save your configuration to a JSON file for later use
+- **Generate Code**: Generate a Python script with your selected configuration
+- **Load Config**: Load a previously saved configuration
+- **Reset**: Reset all settings to defaults
+- **Exit**: Close the GUI
+
+## Using Generated Configuration
+
+After generating a Python script with the "Generate Code" button, you can:
+1. Edit the file to add your OpenAI API key and Azure login credentials
+2. Run the script to start Voyager with your chosen configuration
+
 # Getting Started
 Voyager uses OpenAI's GPT-4 as the language model. You need to have an OpenAI API key to use Voyager. You can get one from [here](https://platform.openai.com/account/api-keys).
 
