@@ -99,11 +99,11 @@ voyager.learn()
 ```
 
 * If you are running with `Azure Login` for the first time, it will ask you to follow the command line instruction to generate a config file.
- For `Azure Login`, you also need to select the world and open the world to LAN by yourself. After you run `voyager.learn()` the game will pop up soon, you need to:
-  1) Select `Singleplayer` and press `Create New World`.
-  2) Set Game Mode to `Creative` and Difficulty to `Peaceful`.
-  3) After the world is created, press `Esc` key and press `Open to LAN`.
-  4) Select `Allow cheats: ON` and press `Start LAN World`. You will see the bot join the world soon. 
+* For `Azure Login`, you also need to select the world and open the world to LAN by yourself. After you run `voyager.learn()` the game will pop up soon, you need to:
+    1) Select `Singleplayer` and press `Create New World`.
+    2) Set Game Mode to `Creative` and Difficulty to `Peaceful`.
+    3) After the world is created, press `Esc` key and press `Open to LAN`.
+    4) Select `Allow cheats: ON` and press `Start LAN World`. You will see the bot join the world soon. 
 
 # Resume from a checkpoint during learning
 
