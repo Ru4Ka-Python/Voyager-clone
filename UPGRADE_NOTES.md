@@ -1,6 +1,6 @@
-# Upgrade Notes: Python 3.14, Node.js 25, OpenAI-Only
+# Upgrade Notes: Python 3.14, Node.js 25, OpenAI-Only, Vanilla Minecraft
 
-This document summarizes the changes made to upgrade the repository for Python 3.14, Node.js 25 compatibility, and removal of Azure dependencies.
+This document summarizes the changes made to upgrade the repository for Python 3.14, Node.js 25 compatibility, removal of Azure dependencies, and vanilla Minecraft support (no mods required).
 
 ## Python 3.14 Compatibility
 
@@ -111,6 +111,26 @@ voyager = Voyager(
 )
 ```
 
+## Vanilla Minecraft Support
+
+### Changes Made:
+- **No mods required**: Voyager now works with any version of vanilla Minecraft Java Edition
+- **No mod loader required**: Fabric and other mod loaders are completely optional
+- Updated all documentation to emphasize vanilla compatibility
+- Made mod installation instructions optional (quality-of-life improvements only)
+- Removed hard dependencies on specific Minecraft versions
+
+### Supported Minecraft Versions:
+- **Recommended**: 1.16.5 - 1.19.x (most tested)
+- **Compatible**: 1.12.2 and later (should work well)
+- **Older**: 1.8 - 1.11.x (may have limited compatibility)
+
+### Optional Mods:
+Mods are now completely optional. They provide quality-of-life features like:
+- Server pause during GPT-4 API calls
+- Enhanced respawn control
+- But they are **not required** for Voyager to function
+
 ## Benefits of These Changes
 
 1. **Simpler Setup**: No need to configure Azure Active Directory apps
@@ -118,6 +138,8 @@ voyager = Voyager(
 3. **More Maintainable**: Less complexity in the codebase
 4. **Better Compatibility**: Support for latest Python and Node.js versions
 5. **Clearer Documentation**: Single, straightforward setup path
+6. **Version Flexibility**: Works with any Minecraft version without mods
+7. **Lower Barrier to Entry**: Users can start with vanilla Minecraft immediately
 
 ## Testing Recommendations
 

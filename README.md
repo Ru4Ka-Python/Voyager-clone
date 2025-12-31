@@ -38,8 +38,12 @@ solve novel tasks from scratch, while other techniques struggle to generalize.
 
 In this repo, we provide Voyager code. This codebase is under [MIT License](LICENSE).
 
+> **🎮 New: Vanilla Minecraft Support!**  
+> Voyager now works with any version of vanilla Minecraft - no mods or mod loaders required!  
+> See [Vanilla Minecraft Guide](VANILLA_MINECRAFT.md) for a quick start.
+
 # Installation
-Voyager requires Python ≥ 3.9 (compatible with Python 3.14) and Node.js ≥ 18.20.8 (compatible with Node.js 25 and LTS versions). We have tested on Ubuntu 20.04, Windows 11, and macOS. You need to follow the instructions below to install Voyager.
+Voyager requires Python ≥ 3.9 (compatible with Python 3.14) and Node.js ≥ 18.20.8 (compatible with Node.js 25 and LTS versions). It works with **any version of vanilla Minecraft** (no mods or mod loaders required). We have tested on Ubuntu 20.04, Windows 11, and macOS. You need to follow the instructions below to install Voyager.
 
 ## Python Install
 ```
@@ -62,17 +66,13 @@ npm install
 ```
 (You can safely ignore messages like [npm warn deprecated ...] and [5 high severity vulnerabilities] )
 
-## Minecraft Instance Install
+## Minecraft Setup
 
-Voyager depends on Minecraft game. You need to install Minecraft game and set up a Minecraft instance.
+Voyager works with vanilla Minecraft (any version). You just need to have Minecraft installed on your system. No mods or mod loaders are required.
 
-Follow the instructions in [Minecraft Login Tutorial](installation/minecraft_instance_install.md) to set up your Minecraft Instance.
+For detailed setup instructions, see [Minecraft Setup Guide](installation/minecraft_instance_install.md).
 
-## Fabric Mods Install
-
-You need to install fabric mods to support all the features in Voyager. Remember to use the correct Fabric version of all the mods. 
-
-Follow the instructions in [Fabric Mods Install](installation/fabric_mods_install.md) to install the mods.
+**Note**: While Voyager works with any Minecraft version, some optional quality-of-life features may require mods (see [Optional Mods](installation/fabric_mods_install.md) for details). However, the core functionality works perfectly with vanilla Minecraft.
 
 # GUI Configuration Tool
 
