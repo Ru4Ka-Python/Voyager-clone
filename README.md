@@ -6,7 +6,8 @@
 [[PDF]](https://voyager.minedojo.org/assets/documents/voyager.pdf)
 [[Tweet]](https://twitter.com/DrJimFan/status/1662115266933972993?s=20)
 
-[![Python Version](https://img.shields.io/badge/Python-3.9-blue.svg)](https://github.com/MineDojo/Voyager)
+[![Python Version](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://github.com/MineDojo/Voyager)
+[![Node Version](https://img.shields.io/badge/Node.js-18.20.8%2B-green.svg)](https://github.com/MineDojo/Voyager)
 [![GitHub license](https://img.shields.io/github/license/MineDojo/Voyager)](https://github.com/MineDojo/Voyager/blob/main/LICENSE)
 ______________________________________________________________________
 
@@ -38,7 +39,7 @@ solve novel tasks from scratch, while other techniques struggle to generalize.
 In this repo, we provide Voyager code. This codebase is under [MIT License](LICENSE).
 
 # Installation
-Voyager requires Python 3.9 and Node.js ≥ 18.20.8. We have tested on Ubuntu 20.04, Windows 11, and macOS. You need to follow the instructions below to install Voyager.
+Voyager requires Python ≥ 3.9 (compatible with Python 3.14) and Node.js ≥ 18.20.8 (compatible with Node.js 25 and LTS versions). We have tested on Ubuntu 20.04, Windows 11, and macOS. You need to follow the instructions below to install Voyager.
 
 ## Python Install
 ```
@@ -112,40 +113,35 @@ For detailed documentation, see [GUI_README.md](GUI_README.md).
 ## Using Generated Configuration
 
 After generating a Python script with the "Generate Code" button, you can:
-1. Edit the file to add your OpenAI API key and Azure login credentials
+1. Edit the file to add your OpenAI API key and Minecraft port
 2. Run the script to start Voyager with your chosen configuration
 
 # Getting Started
 Voyager uses OpenAI's GPT-4 as the language model. You need to have an OpenAI API key to use Voyager. You can get one from [here](https://platform.openai.com/account/api-keys).
 
-After the installation process, you can run Voyager by:
+After the installation process, you need to:
+1. Start Minecraft and create a world
+2. Set Game Mode to `Creative` and Difficulty to `Peaceful`
+3. Press `Esc` and select `Open to LAN`
+4. Enable `Allow cheats: ON` and press `Start LAN World`
+5. Note the port number shown in the chat (e.g., 25565)
+
+Then you can run Voyager by:
 ```python
 from voyager import Voyager
 
-# You can also use mc_port instead of azure_login, but azure_login is highly recommended
-azure_login = {
-    "client_id": "YOUR_CLIENT_ID",
-    "redirect_url": "https://127.0.0.1/auth-response",
-    "secret_value": "[OPTIONAL] YOUR_SECRET_VALUE",
-    "version": "fabric-loader-0.14.18-1.19", # the version Voyager is tested on
-}
+# Replace with your actual Minecraft port from step 5 above
+mc_port = 25565
 openai_api_key = "YOUR_API_KEY"
 
 voyager = Voyager(
-    azure_login=azure_login,
+    mc_port=mc_port,
     openai_api_key=openai_api_key,
 )
 
 # start lifelong learning
 voyager.learn()
-```
-
-* If you are running with `Azure Login` for the first time, it will ask you to follow the command line instruction to generate a config file.
-* For `Azure Login`, you also need to select the world and open the world to LAN by yourself. After you run `voyager.learn()` the game will pop up soon, you need to:
-    1) Select `Singleplayer` and press `Create New World`.
-    2) Set Game Mode to `Creative` and Difficulty to `Peaceful`.
-    3) After the world is created, press `Esc` key and press `Open to LAN`.
-    4) Select `Allow cheats: ON` and press `Start LAN World`. You will see the bot join the world soon. 
+``` 
 
 # Resume from a checkpoint during learning
 
@@ -154,7 +150,7 @@ If you stop the learning process and want to resume from a checkpoint later, you
 from voyager import Voyager
 
 voyager = Voyager(
-    azure_login=azure_login,
+    mc_port=mc_port,
     openai_api_key=openai_api_key,
     ckpt_dir="YOUR_CKPT_DIR",
     resume=True,
@@ -169,7 +165,7 @@ from voyager import Voyager
 
 # First instantiate Voyager with skill_library_dir.
 voyager = Voyager(
-    azure_login=azure_login,
+    mc_port=mc_port,
     openai_api_key=openai_api_key,
     skill_library_dir="./skill_library/trial1", # Load a learned skill library.
     ckpt_dir="YOUR_CKPT_DIR", # Feel free to use a new dir. Do not use the same dir as skill library because new events will still be recorded to ckpt_dir. 

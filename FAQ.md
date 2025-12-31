@@ -1,25 +1,14 @@
 # Frequently Asked Questions
-* [I got connection error after I click on the Azure login link and login to Microsoft account.](#i-got-a-connection-error-after-i-click-on-the-azure-login-link-and-login-to-my-microsoft-account)
-* [I got `KeyError: 'access_token'` after I copied the link](#i-got-keyerror-accesstoken-after-i-copied-the-link)
 * [I got `Subprocess Mineflayer failed to start` error.](#i-got-subprocess-mineflayer-failed-to-start-error)
 * [I saw the bot left and rejoin the game after each task.](#i-saw-the-bot-left-and-rejoin-the-game-after-each-task)
 * [How to show the bot's first-person perspective?](#how-to-show-the-bots-first-person-view)
 * [Can I use GPT-3.5 instead of GPT-4?](#can-i-use-gpt-35-instead-of-gpt-4)
 * [What's the estimated cost of running Voyager?](#whats-the-estimated-cost-of-running-voyager)
 
-## I got a connection error after I click on the Azure login link and login to my Microsoft account.
-
-It's normal that you get a connection refused or 404 error after you log in. You will still see the new URL in your browser. You just need to copy and paste that link. It should contain things like `code=M.C....` in that link.
-
-## I got `KeyError: 'access_token'` after I copied the link
-
-While testing Voyager, we use Redirect URI Type: `Public client/native (mobile & desktop)` in the app registration for Azure Login. However, according to the report in issue [#34](https://github.com/MineDojo/Voyager/issues/34#issuecomment-1567007133), the URI Type was changed to "Web" and it resolved the problem. Feel free to attempt both URI Types to determine which one works for you. If all the approaches fail, please refer to the original tutorial in [minecraft-launcher-lib](https://minecraft-launcher-lib.readthedocs.io/en/stable/tutorial/microsoft_login.html).
-
-Update: This is probably a Microsoft's bug. See [issue #80 in minecraft-launcher-lib](https://codeberg.org/JakobDev/minecraft-launcher-lib/issues/80). If you cannot solve this problem, you can try to use the [Minecraft Official Launcher](./installation/minecraft_instance_install.md#option-2-minecraft-official-launcher) and use mc_port to run.
 ## I got `Subprocess Mineflayer failed to start` error.
 
 There are many reasons that may cause this problem. You can try with following solutions:
-1. Make sure you install nodejs and the dependency packages correctly. You can use the following command to check your installation:
+1. Make sure you install Node.js and the dependency packages correctly. You can use the following command to check your installation:
     ```bash
     cd voyager/env/mineflayer
     node index.js
@@ -30,6 +19,7 @@ There are many reasons that may cause this problem. You can try with following s
     ```python
     from voyager import Voyager
     voyager = Voyager(
+        mc_port=YOUR_MC_PORT,
         server_port=3001, # default is 3000
         ...
     )

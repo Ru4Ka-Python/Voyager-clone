@@ -807,15 +807,17 @@ from voyager import Voyager
 
 openai_api_key = "YOUR_OPENAI_API_KEY"
 
-azure_login = {{
-    "client_id": "YOUR_CLIENT_ID",
-    "redirect_url": "https://127.0.0.1/auth-response",
-    "secret_value": "[OPTIONAL] YOUR_SECRET_VALUE",
-    "version": "fabric-loader-0.14.18-1.19",
-}}
+# Minecraft in-game port
+# To get the port:
+# 1. Start Minecraft and create a world
+# 2. Set Game Mode to Creative and Difficulty to Peaceful
+# 3. Press Esc and select "Open to LAN"
+# 4. Enable "Allow cheats: ON" and press "Start LAN World"
+# 5. Copy the port number from the chat
+mc_port = 25565  # Replace with your actual port
 
 voyager = Voyager(
-    azure_login=azure_login,
+    mc_port=mc_port,
     openai_api_key=openai_api_key,
     action_agent_model_name={models["action"]!r},
     action_agent_temperature={temps["action"]!r},

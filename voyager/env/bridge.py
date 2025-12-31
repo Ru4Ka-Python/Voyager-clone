@@ -11,37 +11,27 @@ from gymnasium.core import ObsType
 
 import voyager.utils as U
 
-from .minecraft_launcher import MinecraftInstance
 from .process_monitor import SubprocessMonitor
 
 
 class VoyagerEnv(gym.Env):
     def __init__(
         self,
-        mc_port=None,
-        azure_login=None,
+        mc_port,
         server_host="http://127.0.0.1",
         server_port=3000,
         request_timeout=600,
         log_path="./logs",
     ):
-        if not mc_port and not azure_login:
-            raise ValueError("Either mc_port or azure_login must be specified")
-        if mc_port and azure_login:
-            warnings.warn(
-                "Both mc_port and mc_login are specified, mc_port will be ignored"
-            )
+        if not mc_port:
+            raise ValueError("mc_port must be specified")
         self.mc_port = mc_port
-        self.azure_login = azure_login
         self.server = f"{server_host}:{server_port}"
         self.server_port = server_port
         self.request_timeout = request_timeout
         self.log_path = log_path
         self.mineflayer = self.get_mineflayer_process(server_port)
-        if azure_login:
-            self.mc_instance = self.get_mc_instance()
-        else:
-            self.mc_instance = None
+        self.mc_instance = None
         self.has_reset = False
         self.reset_options = None
         self.connected = False
@@ -61,25 +51,7 @@ class VoyagerEnv(gym.Env):
             log_path=U.f_join(self.log_path, "mineflayer"),
         )
 
-    def get_mc_instance(self):
-        print("Creating Minecraft server")
-        U.f_mkdir(self.log_path, "minecraft")
-        return MinecraftInstance(
-            **self.azure_login,
-            mineflayer=self.mineflayer,
-            log_path=U.f_join(self.log_path, "minecraft"),
-        )
-
     def check_process(self):
-        if self.mc_instance and not self.mc_instance.is_running:
-            # if self.mc_instance:
-            #     self.mc_instance.check_process()
-            #     if not self.mc_instance.is_running:
-            print("Starting Minecraft server")
-            self.mc_instance.run()
-            self.mc_port = self.mc_instance.port
-            self.reset_options["port"] = self.mc_instance.port
-            print(f"Server started on port {self.reset_options['port']}")
         retry = 0
         while not self.mineflayer.is_running:
             print("Mineflayer process has exited, restarting")
@@ -167,8 +139,6 @@ class VoyagerEnv(gym.Env):
             res = requests.post(f"{self.server}/stop")
             if res.status_code == 200:
                 self.connected = False
-        if self.mc_instance:
-            self.mc_instance.stop()
         self.mineflayer.stop()
         return not self.connected
 

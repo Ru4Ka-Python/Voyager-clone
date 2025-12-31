@@ -10,7 +10,7 @@ from voyager import Voyager
 
 
 def load_voyager_from_config(
-    config_file="voyager_config_example.json", openai_api_key=None, azure_login=None
+    config_file="voyager_config_example.json", openai_api_key=None, mc_port=None
 ):
     """Load Voyager configuration from a JSON file and instantiate Voyager.
 
@@ -20,7 +20,7 @@ def load_voyager_from_config(
     Args:
         config_file: Path to the JSON configuration file
         openai_api_key: Your OpenAI API key (will override config if provided)
-        azure_login: Azure login configuration (will override config if provided)
+        mc_port: Minecraft in-game port (will override config if provided)
 
     Returns:
         (Voyager instance, chat_completions_options dict)
@@ -67,22 +67,13 @@ def load_voyager_from_config(
     if openai_api_key is None:
         openai_api_key = input("Enter your OpenAI API key: ")
 
-    if azure_login is None:
-        print("\nAzure Login Configuration:")
-        azure_login = {
-            "client_id": input("Client ID: "),
-            "redirect_url": input(
-                "Redirect URL (default: https://127.0.0.1/auth-response): "
-            )
-            or "https://127.0.0.1/auth-response",
-            "secret_value": input("Secret value (optional, press Enter to skip): ") or None,
-            "version": input("Version (default: fabric-loader-0.14.18-1.19): ")
-            or "fabric-loader-0.14.18-1.19",
-        }
+    if mc_port is None:
+        print("\nMinecraft Configuration:")
+        mc_port = int(input("Enter Minecraft in-game port: "))
 
     # Create Voyager with the loaded configuration
     voyager = Voyager(
-        azure_login=azure_login,
+        mc_port=mc_port,
         openai_api_key=openai_api_key,
         action_agent_model_name=config["action_agent"]["model"],
         action_agent_temperature=config["action_agent"]["temperature"],
