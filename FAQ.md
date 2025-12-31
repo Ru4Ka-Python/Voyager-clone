@@ -1,35 +1,47 @@
 # Frequently Asked Questions
-* [I got connection error after I click on the Azure login link and login to Microsoft account.](#i-got-a-connection-error-after-i-click-on-the-azure-login-link-and-login-to-my-microsoft-account)
-* [I got `KeyError: 'access_token'` after I copied the link](#i-got-keyerror-accesstoken-after-i-copied-the-link)
+* [Do I need mods to use Voyager?](#do-i-need-mods-to-use-voyager)
+* [What Minecraft versions are supported?](#what-minecraft-versions-are-supported)
 * [I got `Subprocess Mineflayer failed to start` error.](#i-got-subprocess-mineflayer-failed-to-start-error)
 * [I saw the bot left and rejoin the game after each task.](#i-saw-the-bot-left-and-rejoin-the-game-after-each-task)
 * [How to show the bot's first-person perspective?](#how-to-show-the-bots-first-person-view)
 * [Can I use GPT-3.5 instead of GPT-4?](#can-i-use-gpt-35-instead-of-gpt-4)
 * [What's the estimated cost of running Voyager?](#whats-the-estimated-cost-of-running-voyager)
 
-## I got a connection error after I click on the Azure login link and login to my Microsoft account.
+## Do I need mods to use Voyager?
 
-It's normal that you get a connection refused or 404 error after you log in. You will still see the new URL in your browser. You just need to copy and paste that link. It should contain things like `code=M.C....` in that link.
+**No!** Voyager works perfectly with vanilla Minecraft without any mods or mod loaders. Simply start Minecraft, create a world, open it to LAN, and you're ready to go.
 
-## I got `KeyError: 'access_token'` after I copied the link
+Mods are completely optional and only provide quality-of-life improvements like:
+- Server pause during GPT-4 API calls (prevents time passing while waiting for responses)
+- Enhanced respawn control
 
-While testing Voyager, we use Redirect URI Type: `Public client/native (mobile & desktop)` in the app registration for Azure Login. However, according to the report in issue [#34](https://github.com/MineDojo/Voyager/issues/34#issuecomment-1567007133), the URI Type was changed to "Web" and it resolved the problem. Feel free to attempt both URI Types to determine which one works for you. If all the approaches fail, please refer to the original tutorial in [minecraft-launcher-lib](https://minecraft-launcher-lib.readthedocs.io/en/stable/tutorial/microsoft_login.html).
+If you want to use mods, see the [Optional Mods Guide](installation/fabric_mods_install.md). However, we recommend starting with vanilla Minecraft first to ensure everything works.
 
-Update: This is probably a Microsoft's bug. See [issue #80 in minecraft-launcher-lib](https://codeberg.org/JakobDev/minecraft-launcher-lib/issues/80). If you cannot solve this problem, you can try to use the [Minecraft Official Launcher](./installation/minecraft_instance_install.md#option-2-minecraft-official-launcher) and use mc_port to run.
+## What Minecraft versions are supported?
+
+Voyager works with **any Minecraft Java Edition version**, though some versions have been more extensively tested:
+
+- **Recommended**: Minecraft 1.16.5 - 1.19.x (most tested, best compatibility)
+- **Compatible**: Minecraft 1.12.2 and later (should work well)
+- **Older versions**: Minecraft 1.8 - 1.11.x (may have limited compatibility)
+
+You can use any version you already have installed - no need to download a specific version. The mineflayer library that Voyager uses is designed to be compatible across many Minecraft versions.
+
 ## I got `Subprocess Mineflayer failed to start` error.
 
 There are many reasons that may cause this problem. You can try with following solutions:
-1. Make sure you install nodejs and the dependency packages correctly. You can use the following command to check your installation:
+1. Make sure you install Node.js and the dependency packages correctly. You can use the following command to check your installation:
     ```bash
     cd voyager/env/mineflayer
     node index.js
     ```
    If you see `Server started on port {PORT}`, then your installation is correct. You can kill the process by `Ctrl+C`.
-2. Make sure you install Fabric correctly. You should be able to select the Fabric version in the Minecraft launcher. 
+2. Make sure Minecraft is running and you have opened your world to LAN (see the [Minecraft Setup Guide](installation/minecraft_instance_install.md) for details).
 3. Each Mineflayer process can only listen to one port. If you want to start multiple instances of `Voyager`, you need to manually change the port when initialization:
     ```python
     from voyager import Voyager
     voyager = Voyager(
+        mc_port=YOUR_MC_PORT,
         server_port=3001, # default is 3000
         ...
     )

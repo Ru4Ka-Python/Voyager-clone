@@ -1,42 +1,99 @@
-# Minecraft Instance Install
-To start using Voyager, you should first make sure to have an official [Minecraft](https://www.minecraft.net/) game (version 1.19) installed. 
+# Minecraft Setup Guide
 
-There are two ways to start a Minecraft instance for Voyager. Sometimes GPT-4 will write an infinite loop that runs forever. In this case, there'll be a request timeout. Using Azure login can automatically resume the running if there's a request timeout.
+Voyager works with **any version of vanilla Minecraft** - no mods or mod loaders are required!
 
-## Option 1: Microsoft Azure Login (Recommended)
-Using this method will allow Voyager to automatically resume when there's a request timeout. This is dependent on the [minecraft-launcher-lib](https://minecraft-launcher-lib.readthedocs.io/en/stable/tutorial/microsoft_login.html#let-the-user-log-in) library.
+## Requirements
 
-1. Sign in to [Azure Portal](https://portal.azure.com/).
-2. Go to [Azure Active Directory](https://portal.azure.com/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/Overview).
-3. Click on the `App Registrations` tab on the left panel.
-4. Click on the `New registration` button.
-5. Fill the form with the following values:
-    - Name: `YOUR_APP_NAME`
-    - Supported account types: `Accounts in any organizational directory (Any Azure AD directory - Multitenant) and personal Microsoft accounts`
-    - Redirect URI Type: `Public client/native (mobile & desktop)`, Value: `https://127.0.0.1/auth-response` (If you get `KeyError: 'access_token'` in the end, you can try to change the type to `Web`, see [FAQ](https://github.com/MineDojo/Voyager/blob/main/FAQ.md) for more information)
-6. Click on the `Register` button.
-7. The `Application (client) ID` will be your `client_id`.
-8. [Optional] Go to the `Certificates & Secrets` tab and click on the `New client secret` button. Fill the description by yourself. After you click `Add`, you will see your value, this will be your `secret_value`.
-9. Go to your Minecraft install location `YOUR_MINECRAFT_GAME_LOCATION/versions`, and check all the versions you have. All the folder names are your valid `version` value. 
+- Official Minecraft Java Edition (any version)
+- The Minecraft Official Launcher
 
-After these steps, you will finally get your azure_login information:
+## Setup Instructions
+
+1. **Launch Minecraft**
+   - Open the Minecraft launcher
+   - Select any version you prefer (recommended: 1.16.5 or later for best compatibility)
+   - Click "Play"
+
+2. **Create or Open a World**
+   - Select `Singleplayer`
+   - Either create a new world or select an existing one
+   - **Important**: Set the following settings:
+     - Game Mode: `Creative`
+     - Difficulty: `Peaceful`
+
+3. **Open World to LAN**
+   - Once in the world, press `Esc`
+   - Click `Open to LAN`
+   - Configure settings:
+     - Game Mode: `Creative` (if not already)
+     - Allow Cheats: `ON` (required for bot commands)
+   - Click `Start LAN World`
+
+4. **Note the Port Number**
+   - After starting the LAN world, a message will appear in the chat
+   - It will say something like: "Local game hosted on port 25565"
+   - **Write down this port number** - you'll need it to connect Voyager
+
+## Using the Port with Voyager
+
+Once you have the port number, use it when creating your Voyager instance:
+
 ```python
-azure_login = {
-    "client_id": "CLIENT_ID FROM STEP 7",
-    "redirect_url": "https://127.0.0.1/auth-response",
-    "secret_value": "[OPTIONAL] SECRET_KEY FROM STEP 8",
-    "version": "MINECRAFT VERSION YOU WANT TO USE",
-}
+from voyager import Voyager
+
+# Use the port number from step 4
+mc_port = 25565  # Replace with your actual port
+
+voyager = Voyager(
+    mc_port=mc_port,
+    openai_api_key="YOUR_OPENAI_API_KEY",
+)
+
+# Start learning
+voyager.learn()
 ```
-**Voyager use `fabric-loader-0.14.18-1.19` version to run all the experiments.** You may not have this version currently, you can move on to the [Fabric Mods Install](fabric_mods_install.md#fabric-mods-install) section and follow the instructions there to install the fabric version of the game.
 
-## Option 2: Minecraft Official Launcher
+## Supported Minecraft Versions
 
-After you install official Minecraft, you should have a Minecraft official launcher, open it, and follow the instructions here:
-1. Select the version you want to play and start the game.
-2. Select `Singleplayer` and create a new world.
-3. Set Game Mode to `Creative` and Difficulty to `Peaceful`.
-4. After the world is created, press `Esc` and select `Open to LAN`.
-5. Select `Allow cheats: ON` and press `Start LAN World`.
-6. You will see a port number in the chat log, that is your `mc-port`, use this number to instantiate Voyager later.
+Voyager is designed to work with **any Minecraft Java Edition version**. However:
 
+- **Recommended**: Minecraft 1.16.5 - 1.19.x
+  - These versions have been most extensively tested
+  - Best compatibility with mineflayer
+  
+- **Compatible**: Minecraft 1.12.2 and later
+  - Should work with minimal issues
+  
+- **Older Versions**: Minecraft 1.8 - 1.11.x
+  - May have limited compatibility
+  - Some features might not work as expected
+
+## Troubleshooting
+
+### Port Not Showing
+If you don't see a port number in chat:
+- Make sure "Allow cheats" was set to ON
+- Try restarting the world and opening to LAN again
+- Check your game output log
+
+### Connection Issues
+If Voyager can't connect:
+- Verify the port number is correct
+- Make sure the Minecraft world is still running
+- Check that no firewall is blocking the connection
+- Ensure you're using the correct Minecraft version for your setup
+
+### Bot Not Joining
+If the bot doesn't appear in your world:
+- Keep the world running and wait a few seconds
+- Check the Voyager console output for errors
+- Make sure the mineflayer service started correctly (check with `node voyager/env/mineflayer/index.js`)
+
+## Next Steps
+
+After setting up Minecraft:
+1. Verify your port number is working
+2. Configure Voyager with your OpenAI API key
+3. Run your first Voyager session!
+
+For more information, return to [README.md](../README.md#getting-started) to get started.

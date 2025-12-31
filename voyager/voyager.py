@@ -17,8 +17,7 @@ from .agents import SkillManager
 class Voyager:
     def __init__(
         self,
-        mc_port: int = None,
-        azure_login: Dict[str, str] = None,
+        mc_port: int,
         server_port: int = 3000,
         openai_api_key: str = None,
         env_wait_ticks: int = 20,
@@ -55,8 +54,7 @@ class Voyager:
         Curriculum agent is the automatic curriculum in paper.
         Critic agent is the self-verification in paper.
         Skill manager is the skill library in paper.
-        :param mc_port: minecraft in-game port
-        :param azure_login: minecraft login config
+        :param mc_port: minecraft in-game port (required)
         :param server_port: mineflayer port
         :param openai_api_key: openai api key
         :param env_wait_ticks: how many ticks at the end each step will wait, if you found some chat log missing,
@@ -103,7 +101,6 @@ class Voyager:
         # init env
         self.env = VoyagerEnv(
             mc_port=mc_port,
-            azure_login=azure_login,
             server_port=server_port,
             request_timeout=env_request_timeout,
         )
